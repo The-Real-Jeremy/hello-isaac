@@ -12,10 +12,10 @@ Everything the app needs is in this repo: zero dependencies and a prebuilt front
    if you want a different name), then **Run all**.
 4. The last cell prints the **app URL**.
 
-### B) Install as a child of the [App Catalog](https://github.com/The-Real-Jeremy/app-catalog)
-1. Install the App Catalog first (its README, same four steps), so `app-catalog-main/` is in your workspace.
+### B) Install as a child of the [App-ception](https://github.com/The-Real-Jeremy/app-ception)
+1. Install the App-ception first (its README, same four steps), so `app-ception-main/` is in your workspace.
 2. On this GitHub page: **Code → Download ZIP** (`hello-isaac-main.zip`).
-3. In Databricks: open **the same folder that holds `app-catalog-main/`** → **⋮ → Import** → drop the `.zip`.
+3. In Databricks: open **the same folder that holds `app-ception-main/`** → **⋮ → Import** → drop the `.zip`.
    It unzips into `hello-isaac-main/` next to the catalog.
 4. Open **`hello-isaac-main/DEPLOY`**, attach **Serverless**, leave **mode = `child`** (`catalog_folder` is filled in
    for you), then **Run all**. It copies the app into the catalog's `child_apps/hello_isaac/`, adds the scopes the app
@@ -118,7 +118,7 @@ client/                  React 19 + Vite + Tailwind 4 source; self-hosted DM San
 arch/                    isaac-supervisor.arch.json: the diagram, in solution-builder's schema
 vendor/solution-builder/ pristine copies + LICENSE + NOTICE + provenance (Databricks licence)
 scripts/                 build.sh · build-arch.mjs · deploy.py · qa_deployed.mjs
-catalog.yaml             card metadata when it runs inside the App Catalog
+catalog.yaml             card metadata when it runs inside the App-ception
 ```
 
 **Two deliberate choices that look odd:**
@@ -147,10 +147,10 @@ The steps are build, create-if-missing, sync, prune, deploy, then assert. `deplo
 It also prunes the workspace folder, because `sync --full` only uploads. Overrides: `APP_NAME`,
 `DATABRICKS_PROFILE`, `WS_USER`, `WS_PATH`.
 
-### As a child of the [App Catalog](https://github.com/The-Real-Jeremy/app-catalog) (CLI alternative)
+### As a child of the [App-ception](https://github.com/The-Real-Jeremy/app-ception) (CLI alternative)
 ```bash
-rsync -a --exclude .git --exclude node_modules hello-isaac/ <app-catalog>/child_apps/hello_isaac/
-cd <app-catalog> && npm run deploy
+rsync -a --exclude .git --exclude node_modules hello-isaac/ <app-ception>/child_apps/hello_isaac/
+cd <app-ception> && npm run deploy
 ```
 The catalog finds `app/app.yaml`, runs `node server.mjs` on its own port under `/apps/hello_isaac/`,
 and takes the card text from `catalog.yaml`. Identity works unchanged: the catalog forwards the
