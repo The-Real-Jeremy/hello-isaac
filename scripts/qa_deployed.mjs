@@ -1,11 +1,11 @@
 /**
  * Browser QA for the DEPLOYED app, in a REAL headed Chrome.
  *
- * Why this exists rather than the chrome-devtools MCP: the app sits behind the
- * Databricks OAuth wall, and the shared browser profiles' SSO sessions lapse
- * (~5 days) and need interactive Okta MFA. A workspace bearer token IS accepted
- * by the app's auth proxy, but only CDP can put a header on the top-level
- * navigation — so this drives its own headed Chrome over CDP and injects it.
+ * Why a bearer token rather than a browser login: the app sits behind the
+ * Databricks OAuth wall, and an interactive sign-in cannot be scripted. A
+ * workspace bearer token IS accepted by the app's auth proxy, but only CDP can
+ * put a header on the top-level navigation — so this drives its own headed
+ * Chrome over CDP and injects it.
  *
  * State plainly in any write-up: auth here is a bearer header, not an SSO
  * cookie. Everything else — DOM, JS, fetches, fonts, console — is a real
