@@ -1,0 +1,312 @@
+[
+  {
+    "name": "Isaac supervisor",
+    "story": "An agent supervisor rig as it runs on 2026-08-24: a private Slack channel read from a dedicated headed Chrome by a 5-second poller loop in its own cmux pane, one supervisor isaac that routes, delegated project agents in their own cmux workspaces, a warm standby pool of five, and a health check that pulses back into the channel.",
+    "options": {
+      "trademarkLogos": true
+    },
+    "columns": [
+      "human",
+      "channels",
+      "browser",
+      "loop",
+      "supervisor",
+      "agents"
+    ],
+    "custom_logos": [
+      {
+        "id": "browser",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect x='4' y='7' width='40' height='34' rx='5' fill='#F5C5BC'/><circle cx='10.5' cy='13' r='1.9' fill='#EF5B3F'/><circle cx='16.5' cy='13' r='1.9' fill='#EF5B3F'/><circle cx='22.5' cy='13' r='1.9' fill='#EF5B3F'/><path fill='none' stroke='#EF5B3F' stroke-width='2.6' stroke-linecap='round' d='M22.5 30.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Zm5-.5 6.5 6.5'/></svg>"
+      },
+      {
+        "id": "pane",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect x='4' y='8' width='40' height='32' rx='5' fill='#F5C5BC'/><path fill='none' stroke='#EF5B3F' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round' d='m13 19 5 5-5 5'/><path stroke='#EF5B3F' stroke-width='2.8' stroke-linecap='round' d='M23 29h11'/></svg>"
+      },
+      {
+        "id": "mail",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect x='4' y='11' width='40' height='26' rx='4' fill='#F5C5BC'/><path fill='#EF5B3F' d='M4.6 13.4 24 27 43.4 13.4A4 4 0 0 0 40 11H8a4 4 0 0 0-3.4 2.4Z'/></svg>"
+      },
+      {
+        "id": "standby",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect x='4' y='11' width='12' height='12' rx='3' fill='#F5C5BC'/><rect x='18' y='11' width='12' height='12' rx='3' fill='#F5C5BC'/><rect x='32' y='11' width='12' height='12' rx='3' fill='#F5C5BC'/><rect x='11' y='26' width='12' height='12' rx='3' fill='#EF5B3F'/><rect x='25' y='26' width='12' height='12' rx='3' fill='#EF5B3F'/></svg>"
+      },
+      {
+        "id": "pulse",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><circle cx='24' cy='24' r='19' fill='#F5C5BC'/><path fill='none' stroke='#EF5B3F' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M9 24h6l4-8 5 16 4-8h11'/></svg>"
+      },
+      {
+        "id": "bricks",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect x='24' y='3.5' width='18' height='10.5' fill='#F5C5BC'/><rect x='6' y='14' width='18' height='10.5' fill='#EF5B3F'/><rect x='24' y='24.5' width='18' height='10.5' fill='#F5C5BC'/><rect x='6' y='35' width='18' height='10.5' fill='#EF5B3F'/></svg>"
+      },
+      {
+        "id": "agents",
+        "svg": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><rect x='5' y='6' width='26' height='20' rx='4' fill='#F5C5BC'/><rect x='12' y='13' width='26' height='20' rx='4' fill='#F5C5BC'/><rect x='19' y='20' width='24' height='20' rx='4' fill='#EF5B3F'/><path stroke='#fff' stroke-width='2.2' stroke-linecap='round' d='M24 27h9m-9 5h14'/></svg>"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "operator",
+        "type": "logo",
+        "icon": "file:persona/user",
+        "text": "Operator",
+        "desc": "types in Slack, or replies to the email",
+        "col": "human",
+        "caption": "bottom",
+        "ai_reasoning": "the human is the only entry point to the rig; drawn as a persona logo rather than a source tile because he is not a data system",
+        "row": 2
+      },
+      {
+        "id": "slack",
+        "type": "source",
+        "icon": "file:vendor/slack",
+        "label": "Slack channel",
+        "desc": "private channel \u00b7 primary comms",
+        "col": "channels",
+        "row": 1,
+        "caption": "right"
+      },
+      {
+        "id": "gmail",
+        "type": "source",
+        "icon": "custom:mail",
+        "label": "Gmail thread",
+        "desc": "backup input + the phone push",
+        "col": "channels",
+        "row": 3,
+        "caption": "right",
+        "ai_reasoning": "custom envelope rather than a Google mark \u2014 the icon bank has google-drive/docs/sheets but no gmail, and a wrong logo is worse than a neutral one"
+      },
+      {
+        "id": "poller-chrome",
+        "type": "logo",
+        "icon": "custom:browser",
+        "text": "PollerChrome.app",
+        "desc": "headed Chrome, own profile, read over CDP",
+        "col": "browser",
+        "row": 1,
+        "caption": "bottom",
+        "style": {
+          "border": 1,
+          "fill": "#FFFFFF",
+          "radius": 12
+        }
+      },
+      {
+        "id": "tick-loop",
+        "type": "logo",
+        "icon": "custom:pane",
+        "text": "supervisor-ticks.sh",
+        "desc": "one cmux pane \u00b7 while-true, 5s",
+        "col": "loop",
+        "row": 2,
+        "caption": "bottom",
+        "style": {
+          "border": 1,
+          "fill": "#FFFFFF",
+          "radius": 12
+        },
+        "ai_reasoning": "the loop must live INSIDE cmux \u2014 as an outside process nearly every poke dies with a broken pipe"
+      },
+      {
+        "id": "health",
+        "type": "logo",
+        "icon": "custom:pulse",
+        "text": "health-check.sh",
+        "desc": "called every ~2 min, reports every ~15",
+        "col": "loop",
+        "row": 4,
+        "caption": "bottom",
+        "style": {
+          "border": 1,
+          "fill": "#FFFFFF",
+          "radius": 12
+        }
+      },
+      {
+        "id": "supervisor",
+        "type": "logo",
+        "icon": "custom:bricks",
+        "text": "Supervisor",
+        "desc": "one isaac session \u00b7 Opus 5 (1M) \u00b7 effort high",
+        "col": "supervisor",
+        "caption": "bottom",
+        "style": {
+          "border": 1,
+          "fill": "#FFFFFF",
+          "radius": 12
+        },
+        "ai_reasoning": "effort HIGH not max is deliberate \u2014 at max it is too slow to route; the delegated agents are the ones at max | icon is the same brick glyph the Flow-primitives tab uses for the supervisor, so both renderings of this rig read as the same picture; the Anthropic wordmark also collided with the caption.",
+        "row": 2
+      },
+      {
+        "id": "agents",
+        "type": "logo",
+        "icon": "custom:agents",
+        "text": "Project agents",
+        "desc": "own cmux workspace + cwd \u00b7 effort max",
+        "col": "agents",
+        "row": 1,
+        "caption": "bottom",
+        "style": {
+          "border": 1,
+          "fill": "#FFFFFF",
+          "radius": 12
+        }
+      },
+      {
+        "id": "standby",
+        "type": "logo",
+        "icon": "custom:standby",
+        "text": "Warm standby \u00d75",
+        "desc": "idle agents, so nothing waits on a cold spawn",
+        "col": "agents",
+        "row": 3,
+        "caption": "bottom",
+        "style": {
+          "border": 1,
+          "fill": "#FFFFFF",
+          "radius": 12
+        }
+      },
+      {
+        "id": "mac",
+        "type": "box",
+        "title": "The operator's laptop \u2014 everything inside one cmux server",
+        "wraps": [
+          "poller-chrome",
+          "tick-loop",
+          "health",
+          "supervisor",
+          "agents",
+          "standby"
+        ],
+        "pad": 30,
+        "ai_reasoning": "the boundary IS the story: Slack and Gmail are the only things off the laptop, so the box marks the seam"
+      },
+      {
+        "id": "note-detect",
+        "type": "note",
+        "text": "The poller only DETECTS. It never answers, never spawns, never moves the read marker \u2014 it just pokes.",
+        "below": "health",
+        "gap": 34,
+        "size": [
+          190,
+          140
+        ]
+      },
+      {
+        "id": "note-report",
+        "type": "note",
+        "text": "SendMessage cannot reach the supervisor. An agent reports by driving its cmux pane.",
+        "below": "standby",
+        "gap": 34,
+        "size": [
+          190,
+          140
+        ]
+      },
+      {
+        "id": "note-sso",
+        "type": "note",
+        "text": "The poller profile's Slack SSO lapses about every 5 days. It shouts LOGGEDOUT rather than going quiet.",
+        "below": "gmail",
+        "gap": 44,
+        "size": [
+          190,
+          140
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "operator",
+        "to": "slack",
+        "label": "types",
+        "arrow": "end"
+      },
+      {
+        "from": "operator",
+        "to": "gmail",
+        "label": "or emails",
+        "arrow": "end",
+        "dashed": true
+      },
+      {
+        "from": "slack",
+        "to": "poller-chrome",
+        "label": "channel DOM",
+        "flow": true
+      },
+      {
+        "from": "poller-chrome",
+        "to": "tick-loop",
+        "label": "read over CDP \u00b7 5s",
+        "flow": true
+      },
+      {
+        "from": "gmail",
+        "to": "tick-loop",
+        "label": "Gmail API \u00b7 60s",
+        "flow": true
+      },
+      {
+        "from": "tick-loop",
+        "to": "health",
+        "label": "every ~2 min",
+        "arrow": "end",
+        "dashed": true
+      },
+      {
+        "from": "tick-loop",
+        "to": "supervisor",
+        "label": "poke",
+        "flow": true
+      },
+      {
+        "from": "supervisor",
+        "to": "agents",
+        "label": "delegates",
+        "flow": true
+      },
+      {
+        "from": "standby",
+        "to": "agents",
+        "label": "a warm agent",
+        "arrow": "end",
+        "dashed": true
+      },
+      {
+        "from": "agents",
+        "to": "supervisor",
+        "label": "reports back",
+        "arrow": "end",
+        "dashed": true,
+        "shape": "step"
+      },
+      {
+        "from": "supervisor@b",
+        "to": "slack@b",
+        "label": "replies as the operator",
+        "arrow": "end",
+        "shape": "step",
+        "ai_reasoning": "explicit @b handles: the inferred side route collided with another node's caption"
+      },
+      {
+        "from": "supervisor",
+        "to": "gmail",
+        "label": "notify.sh",
+        "arrow": "end",
+        "shape": "step"
+      },
+      {
+        "from": "health",
+        "to": "slack",
+        "arrow": "end",
+        "dashed": true,
+        "shape": "step",
+        "ai_reasoning": "label dropped on purpose: it kept landing on the notify.sh label (measured overlap in the rendered canvas), and the cadence is already on the health node's own desc line"
+      }
+    ],
+    "rowGrid": true
+  }
+]

@@ -1,0 +1,22 @@
+# Databricks App manifest for hello-isaac.
+#
+# The container's build step runs `npm install` against package.json — which has
+# an EMPTY dependency list, so there is nothing to fetch and the notorious
+# "cannot reach the package registry" failure cannot happen here. The
+# client bundle in static/ is built on a laptop and committed; the server is one
+# dependency-free .mjs file.
+#
+# Identity: nothing to configure. Databricks Apps terminates OAuth in front of
+# this container and forwards the caller on every request as
+# x-forwarded-email / x-forwarded-preferred-username / x-forwarded-user, plus an
+# on-behalf-of token in x-forwarded-access-token. server.mjs reads exactly those
+# (a port of solution-builder's server/lib/user.ts) and calls SCIM /Me with the
+# forwarded token to have the workspace confirm whose token it is —
+# `iam.current-user:read` is one of the two scopes every Apps OBO token carries
+# by default, so no `user_authorization.scopes` block is needed for it.
+
+command: ['node', 'server.mjs']
+
+env:
+  - name: NODE_ENV
+    value: production

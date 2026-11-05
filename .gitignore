@@ -1,0 +1,12 @@
+.reference/
+node_modules/
+.DS_Store
+*.log
+.databricks/
+client/node_modules/
+tw
+
+# lockfile is machine-specific (registry URLs); package.json pins the ranges
+client/package-lock.json
+# TypeScript incremental build cache
+*.tsbuildinfo

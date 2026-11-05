@@ -1,0 +1,3 @@
+# Card metadata when this app runs as a child of the App Catalog (ignored standalone).
+title: Hello
+description: Says hello to whoever opened it, using the identity Databricks Apps forwards, and shows that the workspace confirms it (SCIM /Me with the viewer's own token).

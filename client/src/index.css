@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+ * Self-hosted DM Sans + DM Mono — the typefaces solution-builder uses
+ * (its desktop UI loads "DM Sans" and its architecture renderer sets
+ * `font-family: DM Sans, ui-sans-serif, system-ui`). Latin subset only.
+ * Licence: OFL 1.1, text in /fonts/OFL-*.txt.
+ * ========================================================================= */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;          /* variable — every weight from ONE file */
+  font-display: swap;
+  src: url("/fonts/DMSans-100_1000-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/DMMono-400-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/DMMono-500-latin.woff2") format("woff2");
+}
+
+/* ===========================================================================
+ * Tokens copied from solution-builder's own desktop UI
+ * (app/src/demo_prompt_generator/ui/styles/globals.css) so this app reads as
+ * part of the same product: oklch neutrals on hue 248, a slate-blue primary,
+ * radius 0.625rem. The coral SOLID/LIGHT pair in architecture/icons.tsx is the
+ * Databricks product-icon palette and is deliberately NOT re-themed.
+ * ========================================================================= */
+:root {
+  --background: oklch(0.985 0.002 248);
+  --foreground: oklch(0.17 0.02 248);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0.02 248);
+  --primary: oklch(0.54 0.14 248);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.01 248);
+  --secondary-foreground: oklch(0.2 0.02 248);
+  --muted: oklch(0.96 0.006 248);
+  --muted-foreground: oklch(0.52 0.02 248);
+  --accent: oklch(0.96 0.015 248);
+  --accent-foreground: oklch(0.2 0.02 248);
+  --destructive: oklch(0.55 0.22 27);
+  --border: oklch(0.92 0.005 248);
+  --input: oklch(0.92 0.005 248);
+  --ring: oklch(0.54 0.14 248);
+  --radius: 0.625rem;
+  --success: oklch(0.58 0.13 155);
+  --databricks-coral: #EF5B3F;
+}
+
+.dark {
+  --background: oklch(0.14 0.01 248);
+  --foreground: oklch(0.96 0.005 248);
+  --card: oklch(0.17 0.012 248);
+  --card-foreground: oklch(0.96 0.005 248);
+  --primary: oklch(0.62 0.15 248);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.24 0.015 248);
+  --secondary-foreground: oklch(0.96 0.005 248);
+  --muted: oklch(0.24 0.012 248);
+  --muted-foreground: oklch(0.65 0.02 248);
+  --accent: oklch(0.24 0.03 248);
+  --accent-foreground: oklch(0.96 0.005 248);
+  --border: oklch(0.28 0.015 248);
+  --input: oklch(0.28 0.015 248);
+  --ring: oklch(0.62 0.15 248);
+  --success: oklch(0.68 0.14 155);
+}
+
+@theme inline {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-coral: var(--databricks-coral);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * { border-color: var(--border); }
+  html, body, #root { min-height: 100%; }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  button:not(:disabled), a[href], [role="button"]:not([aria-disabled="true"]) { cursor: pointer; }
+}
+
+/* The greeting's entrance — one gentle rise, not a loop. */
+@keyframes hello-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-hello-rise { animation: hello-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* Live-status dot: a soft expanding ring, same idea as the template's
+   pulseRing but on a 6px dot. */
+@keyframes live-dot {
+  0%   { box-shadow: 0 0 0 0 color-mix(in oklch, var(--success) 60%, transparent); }
+  70%  { box-shadow: 0 0 0 7px color-mix(in oklch, var(--success) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--success) 0%, transparent); }
+}
+.animate-live-dot { animation: live-dot 2.4s ease-out infinite; }

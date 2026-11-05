@@ -1,0 +1,12 @@
+{
+  "name": "hello-isaac",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Says hello to whoever opened it, and draws the isaac supervisor rig with solution-builder's own architecture code.",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {}
+}
