@@ -1,5 +1,30 @@
 # hello-isaac
 
+## Install (browser only: no terminal, no CLI, works air-gapped)
+
+Everything the app needs is in this repo: zero dependencies and a prebuilt frontend. Two ways to install it; both use the `DEPLOY` notebook.
+
+### A) Install on its own (a standalone Databricks App)
+1. On this GitHub page: **Code → Download ZIP** (`hello-isaac-main.zip`). No need to unzip it.
+2. In Databricks: **Workspace** → a folder (e.g. your home) → **⋮ → Import** → drop the `.zip` → **Import**.
+   Databricks unzips it into `hello-isaac-main/`.
+3. Open **`hello-isaac-main/DEPLOY`**, attach **Serverless**, set **mode = `standalone`** (and `standalone_app_name`
+   if you want a different name), then **Run all**.
+4. The last cell prints the **app URL**.
+
+### B) Install as a child of the [App Catalog](https://github.com/The-Real-Jeremy/app-catalog)
+1. Install the App Catalog first (its README, same four steps), so `app-catalog-main/` is in your workspace.
+2. On this GitHub page: **Code → Download ZIP** (`hello-isaac-main.zip`).
+3. In Databricks: open **the same folder that holds `app-catalog-main/`** → **⋮ → Import** → drop the `.zip`.
+   It unzips into `hello-isaac-main/` next to the catalog.
+4. Open **`hello-isaac-main/DEPLOY`**, attach **Serverless**, leave **mode = `child`** (`catalog_folder` is filled in
+   for you), then **Run all**. It copies the app into the catalog's `child_apps/hello_isaac/`, adds the scopes the app
+   needs to the catalog app, and redeploys the catalog. The last cell prints `<catalog URL>/apps/hello_isaac/`.
+
+To update either way: import the new ZIP and run `DEPLOY` again. The previous copy is kept, never deleted.
+
+---
+
 A deliberately small Databricks App that does two things:
 
 1. says **hello to whoever opened it**: the real signed-in viewer, not the app's service principal
@@ -115,7 +140,7 @@ The steps are build, create-if-missing, sync, prune, deploy, then assert. `deplo
 It also prunes the workspace folder, because `sync --full` only uploads. Overrides: `APP_NAME`,
 `DATABRICKS_PROFILE`, `WS_USER`, `WS_PATH`.
 
-### As a child of the [App Catalog](https://github.com/The-Real-Jeremy/app-catalog)
+### As a child of the [App Catalog](https://github.com/The-Real-Jeremy/app-catalog) (CLI alternative)
 ```bash
 rsync -a --exclude .git --exclude node_modules hello-isaac/ <app-catalog>/child_apps/hello_isaac/
 cd <app-catalog> && npm run deploy
@@ -124,15 +149,8 @@ The catalog finds `app/app.yaml`, runs `node server.mjs` on its own port under `
 and takes the card text from `catalog.yaml`. Identity works unchanged: the catalog forwards the
 viewer's headers and token.
 
-### Air-gapped / UI only (no CLI, no internet)
-Nothing needs downloading: `app/package.json` has no dependencies and `app/static/` is prebuilt.
-- **Into an App Catalog:** copy this folder (without `client/node_modules`) into
-  `<catalog source folder>/child_apps/hello_isaac/` with Workspace → Import, then click **Deploy** on
-  the catalog app. Or build an install zip with the catalog's
-  `scripts/build_airgap_packages.sh hello_isaac` and load it with its `install_catalog.py` notebook
-  (see the catalog's `docs/AIRGAP.md`).
-- **Standalone:** import the `app/` folder into a workspace folder, then Compute → Apps → Create app →
-  Deploy with that folder as the source code path.
+### Air-gapped / UI only
+See **Install** at the top: the `DEPLOY` notebook does both paths from the browser.
 
 Build only (no deploy): `./scripts/build.sh`. Local run: `node app/server.mjs`, then
 http://127.0.0.1:8765. The identity shows the labelled dev fallback; set `DATABRICKS_HOST` to make
